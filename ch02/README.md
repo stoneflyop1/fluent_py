@@ -5,7 +5,7 @@
 ## 内置序列类型概要
 
 - 作为容器的序列(`container sequences`)：list, tuple, collection.deque等，保存的是引用(hold references)
-- 单一序列(`flat sequences)`：str, bytes, bytearray, memoryview以及array.array等，保存的是值(store values)
+- 顺序结构(`flat sequences)`：str, bytes, bytearray, memoryview以及array.array等，保存的是值(store values)
 
 另一种分组方式
 
@@ -203,3 +203,34 @@ print(2*'abcd') # 'abcdabcd'
 
 - `reverse`: 默认为False，若为True，则降序排列
 - `key`：接受一个参数的函数，默认函数为返回元素本身(identity function)，即：用元素本身做比较
+
+## 何时不需要使用list
+
+- 存储大量的浮点数时用数组(array)更高效
+- 若经常性的要在序列两端添加或删除元素，则使用deque(双端队列)更合适 
+- 若需要经常判断元素是否在序列中，可以使用集合(set)。
+
+示例代码见[nolist.py](nolist.py)
+
+### 数组(array)
+
+类似于C语言中的数组，数组中的元素类型相同，因此相比list更节省空间。
+
+### 内存视图(Memory View)
+
+内存视图是一种共享内存的的序列类型，可以用来处理数组切片。
+关于何时应该使用内存视图的讨论可以参考[Stackoverflow上的讨论](https://stackoverflow.com/questions/4845418/when-should-a-memoryview-be-used/)：
+> 一个内存视图基本上就是python中的一个广义的numpy中的数组结构(没有数学部分)。它允许你在数据结构中共享内存而不需要拷贝。这对于大的数据集非常重要。
+
+要切换内存视图的表示，可以通过memoryview.cast方法切换内存表示，如：从h(short signed integer)换成B(unsigned char)。
+
+## 小结
+
+序列通常按照可变和不可变区分，但也可以按照顺序结构和容器序列来分。顺序结构更紧凑、快、易于使用，但仅能保存原子数据，比如：数字、字符、字节；容器序列更灵活，但是当它们的元素是可变对象时，会有意想不到的结果，尤其是有嵌套数据的时候。
+
+列表推导和生成表达式是一种很强大的生成序列的方式，很容易学习和记忆。
+
+元组可以作为未命名字段的记录以及不可变的列表。元组拆包可以用来给多个变量赋值，甚至可以指定某个变量获得一个元组部分元素的列表值。
+
+序列切片和省略也是很强大的工具，具体使用可以参考numpy包。
+
