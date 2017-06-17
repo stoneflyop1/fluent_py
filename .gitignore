@@ -136,5 +136,11 @@ Temporary Items
 *.jpg
 *.gif
 
+# log files
+*.log
+
 # binary file
 *.bin
+
+# test text files
+*.test
