@@ -79,3 +79,37 @@ def make_suffient_averager():
 ```
 
 ## 实现一个简单的装饰器
+
+示例代码见：[clockdeco.py](clockdeco.py)。注意：`@functools.wraps(func)`的使用。
+
+## 标准库中的装饰器
+
+### functools.lru_cache
+
+最近使用缓存(LRU)，一个常见场景是使用在需要重复计算函数值的递归函数中。示例见：[fibo_cache.py](fibo_cache.py)。标准库函数原型如下：
+
+```python
+functools.lru_cache(maxsize=128, typed=False)
+```
+
+注意：所有使用此装饰器的函数参数都需要是可哈希的。
+
+### functools.singledispatch
+
+使用singledispatch可以实现类似其他语言的泛型特性，见示例代码：[singledispatch.py](singledispatch.py)。
+
+## 函数使用多装饰器修饰(Stacked Decorators)
+
+```python
+@d1
+@d2
+def f(): print('f')
+# Same as above
+def f(): print('f')
+f = d1(d2(f))
+```
+
+## 参数化的装饰器(Parameterized Decorators)
+
+装饰器函数再次返回一个装饰器，这样就可以通过装饰器函数的参数传入一些设置或条件。
+示例参见：[clockdeco.py](clockdeco.py)中的`clock_param`。

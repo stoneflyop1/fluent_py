@@ -34,3 +34,22 @@ def clock0(func):
         return result
 
     return clocked
+
+DEFAULT_FMT = '[{elapsed:0.8f}s] {name}({args}) -> {result}'
+
+def clock_param(fmt=DEFAULT_FMT):
+    def decorate(func):
+        def clocked(*_args):
+            t0 = time.time()
+            _result = func(*_args)
+            elapsed = time.time() - t0
+            name = func.__name__
+            args = ', '.join(repr(arg) for arg in _args)
+            result = repr(_result)
+            print(fmt.format(**locals()))
+            return result
+
+        return clocked
+
+    return decorate
+
