@@ -92,7 +92,7 @@ import weakref
 wref_to_list = weakref.ref(a_list)
 ```
 
-## 不可变类型的小技巧
+### 不可变类型的小技巧
 
 对于不可变类型，python在生成对象时，可能会重用内存(不同的python实现会有不同)。
 
