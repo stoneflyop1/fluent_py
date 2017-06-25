@@ -57,6 +57,8 @@ CPython中使用的是引用计数方式进行垃圾回收。计数为0后，调
 
 弱引用的一个常用场景是缓存。一般地，我们不能因为一个对象再缓存中被引用就阻止对象呗回收。
 
+代码示例见：[weakref_demo.py](weakref_demo.py)
+
 ```python
 # please run in python console
 import weakref
