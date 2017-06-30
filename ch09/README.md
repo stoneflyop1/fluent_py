@@ -43,3 +43,16 @@
 >>> format(2/3, '.1%')
 '66.7%'
 ```
+
+## 可哈希
+
+为了在集合中使用Vector2d，我们需要实现`__hash__`方法，否则会报`TypeError`。
+
+```python
+>>> v1 = Vector2d(3,4)
+>>> set([v1])
+Traceback (most recent call last):
+  File "vector2d.py", line 71, in <module>
+    print(set([v1]))
+TypeError: unhashable type: 'Vector2d'
+```

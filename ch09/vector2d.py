@@ -11,8 +11,19 @@ class Vector2d:
         return cls(*memv)
 
     def __init__(self, x, y):
-        self.x = float(x)
-        self.y = float(y)
+        self.__x = float(x)
+        self.__y = float(y)
+
+    @property
+    def x(self): # readonly
+        return self.__x
+
+    @property
+    def y(self): # readonly
+        return self.__y
+
+    def __hash__(self):
+        return hash(self.x) ^ hash(self.y)
 
     def __iter__(self): # now you can use unpacking like x,y = Vector2d(3,4)
         return (i for i in (self.x, self.y))
