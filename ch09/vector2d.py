@@ -24,6 +24,10 @@ class Vector2d:
     def __str__(self):
         return str(tuple(self))
 
+    def __format__(self, fmt_spec=''):
+        components = (format(c, fmt_spec) for c in self)
+        return '({}, {})'.format(*components)
+
     def __bytes__(self):
         return (bytes([ord(self.typecode)]) +
                 bytes(array(self.typecode, self)))

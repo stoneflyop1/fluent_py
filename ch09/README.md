@@ -22,3 +22,24 @@
 - 静态方法(`staticmethod`)：没有占位参数，使用场景不多，一般可以用函数代替
 
 代码示例见：[methoddemo.py](methoddemo.py)
+
+## 格式化显示(Formatted Displays)
+
+`format()`以及`str.format()`用来格式化显示对象，底层调用的是对象的`__format__(format_spec)`方法。format_spec有如下两种情况：
+
+- 作为内置函数`format`的第二个参数
+- 具有冒号(:)分隔的由{}限定的格式使用`str.format`方法：冒号左侧的为`替换字段语法(replacement field syntax)`；右侧的为[format_spec](https://docs.python.org/3/library/string.html#formatspec)
+
+```python
+>>> brl = 1/2.45  # BRL to USD 汇率
+>>> brl
+0.4081632653061224
+>>> format(brl, '0.4f')  # format_spec = '0.4f'
+'0.4082'
+>>> '1 BRL = {rate:0.2f} USD'.format(rate=brl)  # str.format
+'1 BRL = 0.41 USD”
+>>> format(45,'b')
+'101101'
+>>> format(2/3, '.1%')
+'66.7%'
+```
