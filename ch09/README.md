@@ -56,3 +56,19 @@ Traceback (most recent call last):
     print(set([v1]))
 TypeError: unhashable type: 'Vector2d'
 ```
+
+## 私有的(private)、以及受保护的(protected)字段(Attribute)
+
+一般地，以双下划线开始，而不以双下划线结束的变量作为私有字段(此方式的字段会写入对象的`__dict__`属性词典中)；而以单下划线开始的变量作为受保护的共享字段。不过这只是大部分python程序的约定，并不是强制性的。
+
+## 使用类的`__slots__`特性节省内存
+
+`__slots__`是一个元组，指定说类的实例仅仅包含这些属性(attribute)，而类的实例中也将不再存在`__dict__`属性(因为只会保留slots中的类似`__attr__`属性)，从而对于大量对象的处理可以节省大量内存。
+
+注意：如果使用了`__slots__`以及`__weakref__`，`__weakref__`也要包含到`__slots__`元组中。
+
+### slots的问题
+
+- 若使用了slots，则所有的子类都需要定义slots
+- 只有slots中给出`__dict__`，才能包含所有其他定义的类似属性，但这样就无法节省内存了
+- 若slots中没有包含`__weakref__`，则没法启用对象的弱引用功能

@@ -3,7 +3,7 @@ import math
 
 class Vector2d:
     typecode = 'd' # class attribute used to convert Vector2d to/from bytes
-
+    __slots__ = ('__x', '__y')
     @classmethod
     def frombytes(cls, octets):
         typecode = chr(octets[0])
@@ -61,9 +61,22 @@ if __name__ == '__main__':
     v1_clone = eval(repr(v1))
     print(v1 == v1_clone)
     print(v1)
-    octets = bytes(v1)
-    print(octets)
     print(abs(v1))
     print((bool(v1), bool(Vector2d(0,0))))
+
+    octets = bytes(v1)
     v2 = Vector2d.frombytes(octets)
     print(v2)
+    try:
+        print(v2.__dict__)
+    except AttributeError as e: # raise attribute error when using __slots__
+        print(e)
+    print(octets)
+    print(len(octets))
+    try:
+        v1.typecode = 'f' # raise attribute error when using __slots__
+        o1 = bytes(v1)
+        print(o1)
+        print(len(o1))
+    except AttributeError as e:
+        print(e)
