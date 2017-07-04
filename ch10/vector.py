@@ -41,4 +41,11 @@ class Vector:
         return len(self._components)
 
     def __getitem__(self, index):
-        return self._components[index]
+        cls = type(self)
+        if isinstance(index, slice): # if slice, return a vector
+            return cls(self._components[index])
+        elif isinstance(index, numbers.Integral): # if integer, return item in position
+            return self._components[index]
+        else:
+            msg = '{cls.__name__} indices must be integers'
+            raise TypeError(msg.format(cls=cls))
