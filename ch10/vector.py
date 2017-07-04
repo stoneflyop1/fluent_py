@@ -1,6 +1,7 @@
 from array import array
 import reprlib
 import math
+import numbers # https://docs.python.org/3/library/numbers.html
 
 class Vector:
     typecode = 'd'
