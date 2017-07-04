@@ -5,6 +5,7 @@ import numbers # https://docs.python.org/3/library/numbers.html
 
 class Vector:
     typecode = 'd'
+    shortcut_names = 'xyzt'
 
     def __init__(self, components):
         self._components = array(self.typecode, components)
@@ -50,3 +51,12 @@ class Vector:
         else:
             msg = '{cls.__name__} indices must be integers'
             raise TypeError(msg.format(cls=cls))
+
+    def __getattr__(self, name):
+        cls = type(self)
+        if len(name) == 1:
+            pos = cls.shortcut_names.find(name)
+            if 0 <= pos < len(self._components):
+                return self._components[pos]
+        msg = '{.__name__!r} object has no attribute {!r}'
+        raise AttributeError(msg.format(cls, name))
