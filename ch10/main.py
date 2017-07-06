@@ -1,5 +1,6 @@
 from vector import Vector
-v7 = Vector(range(7))
+
+v7 = Vector(range(10))
 print(v7[-1])
 print(repr(v7[1:4]))
 print(repr(v7[-1:]))

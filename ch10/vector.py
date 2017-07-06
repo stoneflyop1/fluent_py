@@ -8,7 +8,10 @@ class Vector:
     shortcut_names = 'xyzt'
 
     def __init__(self, components):
-        self._components = array(self.typecode, components)
+        comp = array(self.typecode, components)
+        self.comp = comp
+        print(self.comp)
+        self._components = comp
 
     def __iter__(self):
         return iter(self._components)
@@ -73,4 +76,4 @@ class Vector:
             if error:
                 msg = error.format(cls_name=cls.__name__, attr_name=name)
                 raise AttributeError(msg)
-            super().__setattr__(name, value)
+        super().__setattr__(name, value)
