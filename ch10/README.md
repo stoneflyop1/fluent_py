@@ -21,3 +21,12 @@
 
 ### 使用动态属性(Dynamic Attribute Access)
 
+例如：向量的前4个分量分别为x,y,z,t。
+
+### 哈希
+
+对于向量的哈希，可以把每个分量做hash再取抑或(xor)。
+
+注意：对每个分量进行哈希，既可以使用生成表达式(genexp)方式，也可以直接使用`map`函数。
+
+> python2中map比genexp要低效，因为map函数会生成一个内部的list；但是对于python3，因为map是懒加载(yield)的，跟genexp几乎是一样的。

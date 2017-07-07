@@ -2,6 +2,8 @@ from array import array
 import reprlib
 import math
 import numbers # https://docs.python.org/3/library/numbers.html
+import functools
+import operator
 
 class Vector:
     typecode = 'd'
@@ -25,7 +27,16 @@ class Vector:
         return (bytes([ord(self.typecode)]) + bytes(self._components))
 
     def __eq__(self, other):
-        return tuple(self) == tuple(other)
+        if len(self) != len(other): return False
+        for a, b in zip(self, other):
+            if a != b: return False
+        return True
+        ## not efficient for large dimensional vector
+        #return tuple(self) == tuple(other)
+
+    def __hash__(self):
+        hashes = (hash(x) for x in self._components)
+        return functools.reduce(operator.xor, hashes, 0)
 
     def __abs__(self):
         return math.sqrt(sum(x*x for x in self))
