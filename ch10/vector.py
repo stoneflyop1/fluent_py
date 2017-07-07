@@ -8,10 +8,7 @@ class Vector:
     shortcut_names = 'xyzt'
 
     def __init__(self, components):
-        comp = array(self.typecode, components)
-        self.comp = comp
-        print(self.comp)
-        self._components = comp
+        self._components  = array(self.typecode, components)
 
     def __iter__(self):
         return iter(self._components)
@@ -68,7 +65,7 @@ class Vector:
         cls = type(self)
         if len(name) == 1:
             if name in cls.shortcut_names:
-                error = 'readonly attribute {atr_name!r}'
+                error = 'readonly attribute {attr_name!r}'
             elif name.islower():
                 error = "can't set attributes 'a' to 'z' in {cls_name!r}"
             else:
