@@ -11,5 +11,5 @@ except TypeError as e:
 
 print(v7.x, v7.y, v7.z, v7.t)
 
-v7.x = 10
-print(v7)
+print(format(v7))
+print(format(v7, 'h'))
