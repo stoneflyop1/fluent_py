@@ -17,7 +17,11 @@ print(isinstance(SizedClass(), abc.Sized)) # True
 
 注：ABC中的类有些是抽象方法，可以认为是抽象类。当实现其中的抽象类时，若未实现其中的某些抽象方法，则在import时并不会报错，而是在使用那些方法时会报`TypeError`。
 
-## 标准库中的ABC
+## ABC
+
+示例代码见：[abc.py](abc.py)。
+
+### 标准库中的ABC
 
 - collections.abc (Lib/_collections_abc.py)
   - Iterable  --> `__iter__`
@@ -29,3 +33,10 @@ print(isinstance(SizedClass(), abc.Sized)) # True
   - Iterator <-- (Iterable)
 - numbers isinstance (Number, Complex, Real, Rational, Integral)
 - [abc.ABC (Lib/abc.py)](https://docs.python.org/3/library/abc.html)
+
+### 自定义ABC子类
+
+有两种子类：
+
+1. 正常子类，SuperClass和SubClass的关系
+1. 虚拟子类，使用register方法或register装饰器
