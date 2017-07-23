@@ -40,3 +40,25 @@ print(isinstance(SizedClass(), abc.Sized)) # True
 
 1. 正常子类，SuperClass和SubClass的关系
 1. 虚拟子类，使用register方法或register装饰器
+
+register方法在标准库中常用来注册虚拟类：
+
+```python
+Sequence.register(tuple)
+Sequence.register(str)
+Sequence.register(range)
+Sequence.register(memoryview)
+```
+
+## 鹅可以像鸭子一样叫(Geese Can Behave as Ducks)
+
+```python
+>>> class Struggle:
+...   def __len__(self): return 23
+...
+>>> from collections import abc
+>>> isinstance(Struggle(), abc.Sized)
+True
+>>> issubclass(Struggle, abc.Sized)
+True
+```
