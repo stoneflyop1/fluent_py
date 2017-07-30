@@ -56,7 +56,7 @@ print(dd[1]) # []
 
 也可以使用特殊方法`__missing__`，需要注意的是：此方法只在`__getitem__`方法和`indexer([])`中有会被调用，而`get`和`__contains__`(in)不会调用它。
 
-注意：python3可以有效的使用` key in d.keys() `方法判断一个key是否在词典中，因为d.keys()得到的是一个集合(set)；而python2中因为d.keys()得到的是一个列表，所以效率会非常低。
+注意：python3可以有效的使用 `key in d.keys()` 方法判断一个key是否在词典中，因为d.keys()得到的是一个集合(set)；而python2中因为d.keys()得到的是一个列表，所以效率会非常低。
 
 ### 词典的变种
 
