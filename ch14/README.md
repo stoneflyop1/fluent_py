@@ -40,3 +40,7 @@ iter(x)调用时会先找`__iter__`方法，若未找到，则会找`__getitem__
 - [getitem方式](sentence.py])
 - [经典迭代器模式](sentence_iter.py])
 - [使用生成器](sentence_gen.py])
+- [使用生成器,lazy](sentence_gen2.py])
+- [等差数列示例(Arithmetic Progression)](ap.py)
+
+注：itertools模块跟.NET中的LINQ类似。
