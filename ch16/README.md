@@ -13,3 +13,14 @@
 
 ## 使用装饰器自动Priming
 
+可以通过在装饰器里调用`next()`方法做到自动Priming，示例代码见：[coroaverager.py](coroaverager.py)。
+
+## 协程终止和异常处理
+
+若在send给生成器的数据里触发了异常，则协程会因为未经处理的异常而终止。
+
+通过直接调用生成器上的throw方法可以触发指定异常。
+
+而生成器的close方法调用后，若再send数据到生成器或调用next方法时，则会触发`StopIteration`异常。
+
+示例见：[coerr.py](coerr.py)。
