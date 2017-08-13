@@ -33,3 +33,5 @@ asyncio示例代码：[spinner_asyncio.py](spinner_asyncio.py)，使用异步任
 关于asyncio中Task和Coroutine的相关详情，参见[官方文档](https://docs.python.org/3/library/asyncio-task.html)。
 
 asyncio的HTTP协议包[aiohttp](https://pypi.python.org/pypi/aiohttp)不在标准库中，需要独立下载安装。
+
+可以使用Executor(`loop.run_in_executor`)避免在事件循环中的阻塞。比如：操作本地I/O的情况。
