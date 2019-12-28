@@ -1,5 +1,21 @@
-# 《Fluent Python》笔记
+# 《[Fluent Python](https://www.amazon.com/Fluent-Python-Concise-Effective-Programming/dp/1491946008/)》笔记
 
 用Python的方式处理问题
 
-[《Fluent Python》的豆瓣介绍](https://book.douban.com/subject/26278021/)
+- [01 数据模型](ch01/)
+- [02 序列](ch02/)
+- [03 词典和集合](ch03/)
+- [04 文本与字节](ch04/)
+- [05 作为一等公民的函数](ch05/)
+- [06 基于函数的设计模式](ch06/)
+- [07 函数装饰器和闭包](ch07/)
+- [08 对象引用、可变性以及对象回收](ch08/)
+- [09 python方式的对象](ch09/)
+- [10 序列技巧、哈希以及切片](ch10/)
+- [11 接口](ch11/)
+- [12 对象继承](ch12/)
+- [13 操作符重载](ch13/)
+- [14 迭代器和生成器](ch14/)
+- [16 协程](ch16/)
+- [17 使用Future实现并发](ch17/)
+- [18 使用asyncio的并发](ch18/)

@@ -1,13 +1,16 @@
 # Python数据模型
 
-双下划线方法在Python中是一种特殊方法(special method)，可以用于相关的任何对象。比如：`__getitem__`可以用于集合(collections)、迭代(iteration)，以及属性访问(attribute access)中。下面的卡片组示例演示了如何在自己的类中使用特殊方法。
-注：特殊方法一般以双下划线开始和结束，可以称为`dunder methods`。
+## python中的特殊方法(special methods)
+
+以双下划线开始和结尾的方法在Python中是称作特殊方法(**special method**)，可以用于相关的任何对象。比如：`__getitem__`可以用于集合(collections)、迭代(iteration)，以及属性访问(attribute access)中。下面的卡片组示例演示了如何在自己的类中使用特殊方法。
+注：因为以双下划线开始和结束，也称为**dunder methods**。
 
 ## python方式处理卡片组(Card Deck)
 
 使用特殊方法 `__getitem__`和`__len__`实现序列(sequence)，鸭子类型。详细示例参见[示例1](example1.py)
 
 ## 如何使用特殊方法
+
 特殊方法直接由Python解释器调用，比如：`__len__`方法会通过`len`函数调用，`__getitem__`通过`[]`调用。
 
 对于内置类型，如：list, str, bytearray等，Python对`len()`的实现是返回的PyVarObject的C结构体的ob_size字段值。
@@ -15,6 +18,7 @@
 `for i in obj`操作会调用对象obj上的`__iter__`特殊方法，如果存在的话。
 
 ### 特殊方法的使用
+
 - 除非进行元编程，否则不要直接调用特殊方法。
 - 唯一的例外是`__init__`方法，用来对父类进行初始化。
 - 可以使用内置函数(len, iter, str等)触发特殊方法的调用

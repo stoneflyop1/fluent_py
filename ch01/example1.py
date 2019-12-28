@@ -10,10 +10,10 @@ class FrenchDeck:
     def __init__(self):
         self._cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
 
-    def __len__(self):
+    def __len__(self): # sequence length
         return len(self._cards)
 
-    def __getitem__(self, position):
+    def __getitem__(self, position): # get an item from sequence with position index
         return self._cards[position]
 
 suit_values = dict(spades=3, hearts=2, diamonds=1, clubs=0)
@@ -21,7 +21,7 @@ def spades_high(card):
     '''
     @param Card card 
 
-     先比较rank，再比较suit，spades最大 '''
+     first compare rank，then compare suit，spades is considered as the largest '''
     
     rank_value = FrenchDeck.ranks.index(card.rank)
     return rank_value * len(suit_values) +suit_values[card.suit]
