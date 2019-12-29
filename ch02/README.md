@@ -4,17 +4,54 @@
 
 ## 内置序列类型概要
 
-- 作为容器的序列(`container sequences`)：list, tuple, collection.deque等，保存的是引用(hold references)
-- 顺序结构(`flat sequences)`：str, bytes, bytearray, memoryview以及array.array等，保存的是值(store values)
+- 作为[容器](https://docs.python.org/3/library/collections.abc.html)的序列(__container sequences__)：list, tuple以及collection.deque等，保存的是引用(hold references)
+- 顺序结构(__flat sequences__)：str, bytes, bytearray, memoryview以及array.array等，保存的是值(store values)
 
-另一种分组方式
+另一种分组方式是基于对象是否可变分组，可变是指可以改变对象的内部状态或值，比如可以对序列中某一位置的元素进行重新赋值。
 
-- 可变序列(`mutable sequences`)： list, bytearray, array.array, collections.deque以及memoryview
-- 不可变序列(`immutable sequences`)：tuple, str以及bytes
+- 可变序列(__mutable sequences__)： list, bytearray, array.array, collections.deque以及memoryview
+- 不可变序列(__immutable sequences__)：tuple, str以及bytes
+
+关于容器和序列的关系可以参考如下的代码示例：
+
+```python
+class Container:
+    def __contains__(self): pass
+
+class Iterable:
+    def __iter__(self): pass
+
+class Sized:
+    def __len__(self): pass
+
+class Sequence(Container, Iterable, Sized):
+    def __getitem__(self, index): pass
+    def __reversed__(self): pass
+    def index(self): pass
+    def count(self): pass
+
+class MutableSequence(Sequence):
+    def __setitem__(self, index): pass
+    def __delitem__(self, index): pass
+    def insert(self, obj): pass
+    def append(self, obj): pass
+    def reverse(self): pass
+    def extend(self, otherSequence): pass
+    def pop(self): pass
+    def remove(self, obj): pass
+    def __iadd__(self, obj): pass
+```
+
 
 ## 列表推导(List Comprehensions)以及生成器表达式(Generator Expressions)
 
-列表推导用来生成列表，会在内存中生成列表对象实例并填充所有数据。
+列表推导用来生成列表，会在内存中生成列表对象实例并填充所有数据。列表推导使用中括号。基本形式如下：
+
+```python
+def map_fun(i): return i
+list_obj = [1,2,3]
+res = [map_fun(s) for s in list_obj]
+```
 
 列表推导相关示例代码见[listcomps.py](listcomps.py)
 
@@ -23,23 +60,25 @@
 ```python
 symbols = '$¢£¥€¤'
 codes = []
-for symbol in symbols: #使用for...in添加列表项
+for symbol in symbols: # use for...in adding item to a list
     codes.append(ord(symbol))
 print(codes)
-codes = [ord(symbol) for symbol in symbols] # 使用列表推导直接生成列表
+codes = [ord(symbol) for symbol in symbols] # use listcomp
 print(codes)
 ```
 
-注：python2.x版本中，列表推导中的变量若与当前作用域(scope)内的变量名相同，执行列表推导后，变量会跟列表推导中的值相同；python3中无此问题(列表推导会创建局部作用域)。
+注：python2.x版本中，列表推导不会建立局部作用域，若其中使用了当前作用域的其他变量名，则会修改其他变量的值；python3中无此问题(列表推导会创建局部作用域)。
 
 ```python
 x = 'my precious'
 dummy = [x for x in 'ABC']
-print x # x is 'C' in python2.x
+# print x # x is 'C' in python2.x
 print(x) # x is 'my precious' in python3
 ```
 
 ### 与过滤(filter)和映射(map)比较
+
+如下示例对同一问题给出了listcomp和filter/map两种实现方式。filter和map将在[ch05](/ch05/)中详细介绍。
 
 ```python
 symbols = '$¢£¥€¤'
@@ -70,7 +109,7 @@ print(tshirts)
 
 ### 生成器表达式(Generator Expressions)
 
-元组(tuples)、数组(arrays)以及其他类型的序列，也可以使用listcomp，但是生成器表达式(genexp)更加的节省内存，因为它使用迭代器协议(iterator protocol)来一项项添加到序列中，而不会像listcomp那样先生成整个列表，再添加到序列。
+元组(tuples)、数组(arrays)以及其他类型的序列，也可以使用listcomp，但是生成器表达式(genexp)更加的节省内存，因为它使用迭代器协议(iterator protocol)来一项项添加到序列中(使用__yield__关键字)，而不会像listcomp那样先生成整个列表，再添加到序列。genexps是懒加载方式(延后加载)，listcomps是热加载方式(立即加载)。
 
 genexps唯一与listcomps不同的地方是使用小括号`()`而不是中括号`[]`。
 
@@ -86,7 +125,7 @@ codes = array.array('I', generator)
 print(codes)
 ```
 
-## 元组(tuple)不只是不可变的列表
+## 元组(tuple)：不只是不可变的列表
 
 元组相关示例代码见[tuple.py](tuple.py)
 
@@ -138,12 +177,12 @@ for name, cc, pop, (latitude, longitude) in metro_areas:
 ### 命名元组(Named Tuples)
 
 命名元组是元组的子类(subclass)，增加了字段的名称(field names)以及类名(class name)属性。
-跟自定义对象相比，它的好处是不需要在每个实例上存储一个`__dict__`，节省内存。
+跟自定义对象相比，它的好处是不需要在每个实例上存储一个`__dict__`，节省内存。适用于仅有数据的对象类定义。
 
 ```python
 from collections import namedtuple
 City = namedtuple('City', 'name country population coordinates')
-tokyo = City('Tokyo', 'JP', 36.933, (35.689722, 139.691667))
+tokyo = City(name='Tokyo', country='JP', population=36.933, coordinates=(35.689722, 139.691667))
 print(tokyo)
 print(tokyo.population)
 print(tokyo.coordinates)
@@ -156,11 +195,48 @@ tDict = delhi._asdict() #OrderedDict
 for key, value in tDict.items(): print(key+':', value)
 ```
 
+### 元组作为不可变列表
+
+| 方法 | list | tuple | 示例说明 |
+| ---- | ---- | ---- | ---- |
+| `s.__add__(s2)` | ✔ | ✔ | `s + s2` -- concatenation |
+| `s.__iadd__(s2)` | ✔ | -- | `s += s2` -- in-place concat |
+| `s.append(e)` | ✔ | -- | add element to the end |
+| `s.clear()` | ✔ | -- | delete all items |
+| `s.__contains__(e)` | ✔ | ✔ | `e in s` |
+| `s.copy()` | ✔ | -- | shallow copy |
+| `s.count(e)` | ✔ | ✔ | occurences of item e |
+| `s.__delitem__(index)` | ✔ | -- | remove at index |
+| `s.extend(it)` | ✔ | -- | append items of iterable  to the end |
+| `s.__getitem__(index)` | ✔ | ✔ | `s[index]` |
+| `s.index(e)` | ✔ | ✔ | find the first index of an item e |
+| `s.insert(index, e) | ✔ | -- | insert e just before index |
+| `s.__iter__()` | ✔ | ✔ | get iterator |
+| `s.__len__()` | ✔ | ✔ | `len(s)` |
+| `s.__mul__(n)` | ✔ | ✔ | `s*n` repeat concat |
+| `s.__imul__(n)` | ✔ | -- | `s *= n` in-place |
+| `s.__rmul__(n)` | ✔ | ✔ | `n*s` reversed repeat concat |
+| `s.pop([index])` | ✔ | -- | remove and return last item or item at optional index |
+| `s.remove(e)` | ✔ | -- | remove the first occurence of e by value |
+| `s.reverse()` | ✔ | -- | in-place reverse |
+| `s.__reversed__()` | ✔ | -- | get iter to scan from last to first |
+| `s.__setitem__(index, e)` | ✔ | -- | `s[index] = e` |
+| `s.sort([key], [reverse])` | ✔ | -- | in-place sort with optional key and order |
+
 ## 切片(Slicing)
 
 ### 切片对象(Slice Object)
 
-使用`[start:stop:step]`生成切片对象。
+使用`[start:stop:step]`生成切片，或使用切片对象。
+
+```python
+l = [1,2,3,4]
+l[:2] # [1,2]
+l[2:] # [3,4]
+l[::2] # [1,3]
+s = slice(0,2)
+l[s] # [1,2]
+```
 
 ### 多维切片(Multidimensional Slicing)和省略(Ellipsis)对象
 
@@ -182,27 +258,53 @@ print(l)
 
 示例代码见[op.py](op.py)
 
-### 使用列表创建列表
+```python
+[1,2]*2 # [1,2,1,2]
+2*'ab' # 'abab'
+```
+
+### 创建包含列表的列表(nested lists)
+
+使用`*`重复生成列表元素时，要注意若`*`操作的是引用(如：list)，则重复生成的list元素都是指向同一个地址的引用。
+
+示例见[weird.py](weird.py)
 
 ```python
-l = [1,2,3]
-print(l*3) # [1,2,3,1,2,3,1,2,3]
-print(2*'abcd') # 'abcdabcd'
+weird_board = [['_'] * 3] * 3
+weird_board[1][2] = 'O'
+print(weird_board) # [['_', '_', 'O'], ['_', '_', 'O'], ['_', '_', 'O']]
+# same as below
+row = ['_'] * 3
+board = []
+for i in range(3): board.append(row)
 ```
-注：若序列中的元素为引用类型(如：元素为列表),则新生成的序列中引用类型虽然展示多个，但其实都是指向同一个内存地址。因为作为容器的序列中保存的是引用，而不是数据。
 
 ### 序列的增量赋值(Augmented Assignment)
 
-- `__iadd__` (对于可变类型为在位编辑) => +=  if not, use `__add__` (重新赋值)
+- `__iadd__` (对于可变类型为在位编辑) => +=  if not mutable, use `__add__` (重新赋值)
 - `__imul__` (对于可变类型为在位编辑) => *=
+
+建议：不要在tuple中使用可变对象。
 
 ## 排序(list.sort和sorted函数)
 
-`list.sort`方法使用在位排序的方式，而`sorted`内置函数则会生成一个新的列表。
+`list.sort`方法使用在位(in-place)排序的方式; `sorted`内置函数则会生成一个新的列表。
 两个方法都接受两个可选参数：
 
 - `reverse`: 默认为False，若为True，则降序排列
 - `key`：接受一个参数的函数，默认函数为返回元素本身(identity function)，即：用元素本身做比较
+
+示例见[sort.py](sort.py)
+
+```python
+l = [3,5,1,8]
+l2 = sorted(l) # l2 = [1, 3, 5, 8], l = [3,5,1,8]
+l.sort(reverse=True) # l = [8, 5, 3, 1]
+```
+
+## [有序序列的二分查找](https://docs.python.org/3/library/bisect.html)
+
+若序列有序，可以使用二分查找(bisect.bisect)提高查询速度(时间复杂度是：ln N);若插入元素到序列需要保持顺序，可以使用`bisect.inorder进行插入操作。示例见：[bisect_test.py](bisect_test.py)。
 
 ## 何时不需要使用list
 
@@ -210,27 +312,43 @@ print(2*'abcd') # 'abcdabcd'
 - 若经常性的要在序列两端添加或删除元素，则使用deque(双端队列)更合适 
 - 若需要经常判断元素是否在序列中，可以使用集合(set)。
 
+## 可变序列
+
 示例代码见[nolist.py](nolist.py)
 
-### 数组(array)
+### [数组(array)](https://docs.python.org/3/library/array.html)
 
-类似于C语言中的数组，数组中的元素类型相同，因此相比list更节省空间。
+类似于C语言中的数组，数组中的元素类型相同，存储更紧凑，相比list更节省空间。
 
-### 内存视图(Memory View)
+### [内存视图(Memory View)](https://docs.python.org/3/library/stdtypes.html#memory-views)
 
 内存视图是一种共享内存的的序列类型，可以用来处理数组切片。
 关于何时应该使用内存视图的讨论可以参考[Stackoverflow上的讨论](https://stackoverflow.com/questions/4845418/when-should-a-memoryview-be-used/)：
 > 一个内存视图基本上就是python中的一个广义的numpy中的数组结构(没有数学部分)。它允许你在数据结构中共享内存而不需要拷贝。这对于大的数据集非常重要。
 
+```python
+# memoryview, 通过修改字节修改数组的值
+numbers = array('h', [-2,-1,0,1,2]) # 有符号的整数(符号占用一个位)：signed integer
+memv = memoryview(numbers)
+print(len(memv))
+print(memv[0])
+memv_oct = memv.cast('B') # 内部表示改为字节(byte)形式，注：每8个位(bit)为一个字节，每个位只有0，1两种值
+print(memv_oct.tolist())
+memv_oct[5] = 4
+print(numbers)
+```
+
 要切换内存视图的表示，可以通过memoryview.cast方法切换内存表示，如：从h(short signed integer)换成B(unsigned char)。
+
+### 队列
+
+使用序列上的__append__和__pop__方法可以用来模拟栈(stack, 先进后出：FILO)和队列(先进先出：FIFO)这两种数据结构。
+collections.deque是一个线程安全的两端队列，可以在两端进行插入和删除操作。
 
 ## 小结
 
-序列通常按照可变和不可变区分，但也可以按照顺序结构和容器序列来分。顺序结构更紧凑、快、易于使用，但仅能保存原子数据，比如：数字、字符、字节；容器序列更灵活，但是当它们的元素是可变对象时，会有意想不到的结果，尤其是有嵌套数据的时候。
-
-列表推导和生成表达式是一种很强大的生成序列的方式，很容易学习和记忆。
-
-元组可以作为未命名字段的记录以及不可变的列表。元组拆包可以用来给多个变量赋值，甚至可以指定某个变量获得一个元组部分元素的列表值。
-
-序列切片和省略也是很强大的工具，具体使用可以参考numpy包。
+- 序列通常按照可变和不可变区分，但也可以按照顺序结构(flat)和容器(container)序列来分。顺序结构更紧凑、快、易于使用，但仅能保存原子数据(atomic)，比如：数字、字符、字节；容器序列更灵活，但是当它们的元素是可变对象时，会有意想不到的结果，尤其是有嵌套数据结构的时候。
+- 列表推导和生成表达式是一种很强大的生成序列的方式，比用遍历的方式更直观。
+- 元组可以作为未命名字段的记录以及不可变的列表。元组拆包可以用来给多个变量赋值，甚至可以指定某个变量获得一个元组部分元素的列表值。
+- 序列切片和省略[ellipsis (...)]也是很强大的工具，具体使用可以参考numpy包。
 
