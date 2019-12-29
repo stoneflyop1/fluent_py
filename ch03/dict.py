@@ -1,6 +1,6 @@
 # generic Mapping type
 import collections
-from collections import Mapping # from collections.abc if 2.6~3.2
+from collections.abc import Mapping # py > 2.6
 my_dict = {}
 print('Is dict Mapping type? '+str(isinstance(my_dict, Mapping)))
 
@@ -11,20 +11,21 @@ c = dict(zip(['one', 'two', 'three'],[1,2,3]))
 d = dict([('two',2), ('one', 1), ('three',3)])  # dict Comprehension
 e = dict({'three':3, 'one':1, 'two':2})
 print(a == b == c == d == e) # True
+# dictcomps
+f = {code: country for code, country in [(86,'China'), (91, 'India')]}
 
 # get default value for dict and setdefault for a key
 d = {}
-getdefault = 2
-print(d.get(1, getdefault))
+default = 2
+print(d.get(1, default))
 print(d.__contains__(1)) # False
 d.setdefault(2, 3)
 print(d[2]) # 3
 
-dd_type = list
-dd = collections.defaultdict(dd_type)
+dd = collections.defaultdict(list)
 dd[0] = 1
-print(dd[0])
-print(dd[1])
+print(dd[0]) # 1
+print(dd[1]) # []
 
 # # ChainMap
 # import builtins
@@ -43,13 +44,13 @@ print(ct.most_common(2))
 ## subclass dict
 class StrKeyDict0(dict):
     def __missing__(self, key):
-        if isinstance(key, str):
+        if isinstance(key, str): # If key is str, and it’s missing, raise KeyError.
             raise KeyError(key)
         return self[str(key)]
 
     def get(self, key, default=None):
         try:
-            return self[key] # __getitem__, will call __missing__ method is key is missing
+            return self[key] # __getitem__, will call __missing__ method if key is missing
         except KeyError:
             return default
     
