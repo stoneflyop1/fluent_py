@@ -1,11 +1,15 @@
-#####################################
-# @param {name} 位置参数，也可以按照关键字参数传入
-# @param {cls} 仅能作为关键字参数(因为在星号参数之后给出)，即：传入参数时必须写cls=value；是python3的特性
-# @param {content} 所有从第二个开始不是以关键字传入的参数都会以tuple的形式被此参数捕获
-# @param {attrs} 按照词典展开参数，若可以匹配位置参数则会认为是位置参数，其他作为key-value形式提供给函数
 
 def tag(name, *content, cls=None, **attrs):
-    ''' generate one or more HTML tags '''
+    ''' generate one or more HTML tags 
+
+    @param {name} 位置参数，也可以按照关键字参数传入
+
+    @param {cls} 仅能作为关键字参数(因为在星号参数之后给出)，即：传入参数时必须写cls=value；是python3的特性
+
+    @param {content} 所有从第二个开始不是以关键字传入的参数都会以tuple的形式被此参数捕获
+
+    @param {attrs} 按照词典展开参数，若可以匹配位置参数则会认为是位置参数，其他作为key-value形式提供给函数
+    '''
     if cls is not None:
         attrs['class'] = cls
     if attrs:
