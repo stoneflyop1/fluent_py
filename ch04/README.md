@@ -23,16 +23,38 @@
 编码：从字符到码位，需要制定编码格式，如：utf8
 解码：从码位到字符，需要制定编码格式，如：utf8
 
+```python
+# Character encode decode
+s = 'café'
+print(s) # café
+print(len(s)) # str = 5
+b = s.encode('utf8') # => bytes
+print(b) # b'cafe\xcc\x81'
+print(len(b)) # bytes = 6
+c = b.decode('utf8') # => str
+print(c)  # café
+```
+
 ## 字节基础
 
 示例代码见：[bytes.py](bytes.py)
 
 Python3中的`bytes`并不仅仅是python2中的`str`。
 
-- 不可变字节： `bytes`
+- 不可变字节数组： `bytes`
 - 可变字节数组： `bytearray`
 
-字节数组的字面值表示
+```python
+cafe = bytes('café', encoding='utf_8') # bytes can be built from a str, given an encoding.
+print(cafe)
+print(cafe[0])
+print(cafe[:1])
+cafe_arr = bytearray(cafe)
+print(cafe_arr)
+print(cafe_arr[-1:])
+```
+
+字节数组中每个字节的字符串表示
 
 - 可打印的ASCII
 - 转义序列，如：制表符(tab)、换行符(newline)、回车符(carriage return)、以及转义字符(\)
@@ -40,7 +62,7 @@ Python3中的`bytes`并不仅仅是python2中的`str`。
 
 创建字节数组
 
-- 使用fromhex方法 如：bytes.fromhex('31 4B CE A9')
+- 从十六进制创建，使用fromhex方法 如：bytes.fromhex('31 4B CE A9')
 - 使用构造函数
     - str类型的参数以及encoding关键词变量
     - 可遍历集合(元素范围：0~255)
@@ -54,6 +76,8 @@ Python3中的`bytes`并不仅仅是python2中的`str`。
 
 
 ## 文本编码和解码
+
+示例见[coder.py](coder.py)。
 
 文本是可以按照不同的编码器以不同的字节序列进行编码的，解码即通过编码器把字节序列重新还原为文本。
 
@@ -78,11 +102,21 @@ Python3中的`bytes`并不仅仅是python2中的`str`。
 
 注：Windows系统下的文件系统编码问题解释：[Difference between MBCS and UTF-8 on Windows](https://stackoverflow.com/questions/3298569/difference-between-mbcs-and-utf-8-on-windows)
 
-## Unicode正则化(normalization)
+## Unicode正则化(normalization)，字符串比较
 
 - NFC(Normalization Form C)会组合字符的码位(code point)以生成最短的等价字符串
 - NFD会把字符展开成基本字符(base characters)
 - NFKC和NFKD中的K表示相容性(compatibility)，对于compatibility字符会进行相融分解(compatibility decomposition)，即使会有格式损失。
+
+```python
+from unicodedata import normalize
+s1 = 'café' # composed "e" with acute accent
+s2 = 'cafe\u0301' # decomposed "e" and acute accent
+print(len(s1), len(s2)) # (4,5)
+print(len(normalize('NFC', s1)), len(normalize('NFC', s2))) # (4,4)
+print(len(normalize('NFD', s1)), len(normalize('NFD', s2))) # (5,5)
+print(normalize('NFC', s1) == normalize('NFC', s2)) # True
+```
 
 ## 对Unicode文本排序
 
@@ -103,6 +137,8 @@ UCA算法的好处是不考虑locale，且可以提供自己的Collation表。
 
 ```sh
 pip3 install pyuca
+# conda环境
+conda install -c conda-forge pyuca
 ```
 
 ## Unicode数据库
@@ -123,7 +159,9 @@ Unicode标准提供了一个完整的数据库，由多个结构化的文本文�
 | U+2480 |  ⒀  |   -   |   -   |  isnum  | 13.00 | PARENTHESIZED NUMBER THIRTEEN |
 | U+3285 |  ㊅  |   -   |   -   |  isnum  |  6.00  | CIRCLED IDEOGRAPH SIX |
 
-## 双模式的字符串和字节API
+unicode示例见[unicode.py](unicode.py)。
+
+## 字符串和字节API
 
 ### 正则表达式
 
@@ -131,15 +169,33 @@ Unicode标准提供了一个完整的数据库，由多个结构化的文本文�
 
 str形式的pattern情况下，有一个`re.ASCII`的标志使得 `\w`, `\W`, `\b`, `\B`, `\d`, `\D`, `\s`和`\S`仅匹配ASCII字符。
 
+示例见[regex.py](regex.py)。
+
+```python
+# unicode dual mode
+import re
+re_numbers_str = re.compile(r'\d+')
+re_words_str = re.compile(r'\w+')
+re_numbers_bytes = re.compile(rb'\d+')
+re_words_bytes = re.compile(rb'\w+')
+text_str = ('Ramanujan saw \u0be7\u0bed\u0be8\u0bef'
+    " as 1729 = 1³ + 12³ = 9³ + 10³.")
+text_bytes = text_str.encode('utf_8')
+print('Text', repr(text_str), sep='\n ') # 'Ramanujan saw ௧௭௨௯ as 1729 = 1³ + 12³ = 9³ + 10³.'
+print('Numbers')
+print('   str  :', re_numbers_str.findall(text_str)) # ['௧௭௨௯', '1729', '1', '12', '9', '10']
+print('   bytes:', re_numbers_bytes.findall(text_bytes)) # [b'1729', b'1', b'12', b'9', b'10']
+print('   str  :', re_words_str.findall(text_str)) #  ['Ramanujan', 'saw', '௧௭௨௯', 'as', '1729', '1³', '12³', '9³', '10³']
+print('   bytes:', re_words_bytes.findall(text_bytes)) # [b'Ramanujan', b'saw', b'as', b'1729', b'1', b'12', b'9', b'10']
+```
+
 ### 系统函数(os function)
 
 os函数接受文件名或路径名为str或者byte模式，得出的结果跟文件系统的编码有关(sys.getfilesystemencoding)。byte模式下对于需要编码的字符会给出其码位。
 
 ```python
-“>>> os.listdir('.')  # 
-['abc.txt', 'digits-of-π.txt']
->>> os.listdir(b'.')  # 
-[b'abc.txt', b'digits-of-\xcf\x80.txt']”
+os.listdir('.')  # ['abc.txt', 'digits-of-π.txt']
+os.listdir(b'.')  # [b'abc.txt', b'digits-of-\xcf\x80.txt']
 ```
 
 os模块还提供了两个专门的编码解码函数，其中参数filename即可以使str，也可以使byte

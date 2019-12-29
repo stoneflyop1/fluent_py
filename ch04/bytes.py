@@ -1,4 +1,6 @@
-cafe = bytes('café', encoding='utf_8')
+cafe = b'caf\xc3\xa9' 
+#cafe = bytes('café', encoding='utf_8') # bytes can be built from a str, given an encoding.
+print(cafe.decode(encoding='utf8'))
 print(cafe)
 print(cafe[0])
 print(cafe[:1])
