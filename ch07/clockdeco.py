@@ -1,7 +1,7 @@
 import time
 
 def clock(func):
-    ''' cannot use keyword arguments '''
+    ''' custom decorate function, cannot use keyword arguments '''
     def clocked(*args):
         t0 = time.perf_counter() # 记录开始时间
         result = func(*args) # 调用原始函数
@@ -16,7 +16,7 @@ def clock(func):
 import functools
 
 def clock0(func):
-    ''' deal with \* and \** arguments '''
+    ''' custom decorate function, deal with \* and \** arguments '''
     @functools.wraps(func) # 用来处理关键字变量参数
     def clocked(*args, **kwargs):
         t0 = time.time()

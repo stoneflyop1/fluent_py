@@ -1,19 +1,22 @@
 # 函数装饰器(Decorators)和闭包(Closures)
 
-装饰器为接受函数作为参数，并且以函数作为输出的函数。
+装饰器是一种特殊的函数，它以函数作为输入和输出，可以用来增强已定义的函数。
 
 - 装饰器具有用不同的函数替换装饰器函数的能力
-- 装饰器在模块加载时会立即执行
+- 装饰器在模块加载时会立即执行，见[示例register.py](register.py)，但被装饰的函数还是在显式调用的时候执行
 
 ```python
 @decorate
 def target():
     print('running target()')
-# Same with below
+# 以上的函数定义跟如下的定义和调用等价
 def target():
     print('runing target()')
 target = decorate(target)
 ```
+
+注意：自定义装饰器需要理解[闭包](https://www.geeksforgeeks.org/python-closures/)和[`nonlocal`](https://www.smallsurething.com/a-quick-guide-to-nonlocal-in-python-3)关键字。
+
 
 ## 变量的作用域规则(Variable Scope Rules)
 
@@ -47,6 +50,25 @@ target = decorate(target)
     except UnboundLocalError as e:
         print('b is local now: ' + str(e))
     f3(3)
+    ```
+- 函数作用域对函数变量赋值`nonlocal`
+    ```python
+    def outer():
+        a = 'outer'
+        def inner():
+            a = 'inner'
+            print(a)
+        print(a) # outer
+        inner() # inner
+
+    def nonlocal_outer():
+        a = 'outer'
+        def inner():
+            nonlocal a
+            a = 'nonlocal_inner' # change a in the scope of nonlocal_outer
+        print(a) # outer
+        inner()
+        print(a) # nonlocal_inner
     ```
 
 ## 闭包(Closures)
